@@ -2,7 +2,12 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-API="${API_URL:-http://localhost:8000}"
+if [ -n "${API_URL:-}" ]; then
+  API="$API_URL"
+else
+  API_HOST_PORT="$(docker compose port api 8000 2>/dev/null | tail -n 1 | awk -F: '{print $NF}')"
+  API="http://localhost:${API_HOST_PORT:-18000}"
+fi
 
 echo "Waiting for API..."
 for _ in $(seq 1 60); do

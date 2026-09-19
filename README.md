@@ -37,23 +37,58 @@ cp .env.example .env
 Then open:
 
 - Web UI: http://localhost:3000
-- API docs: http://localhost:8000/docs
-- API health: http://localhost:8000/health
+- API docs: http://localhost:18000/docs
+- API health: http://localhost:18000/health
 
 The bootstrap script starts the infrastructure, pulls the configured Ollama model, builds the application, and runs a smoke test.
+
+### Port configuration and conflicts
+
+Docker keeps the API on port `8000` inside its private network, while the laptop exposes it on `18000` by default. This avoids conflicts with other local APIs that commonly use port `8000`.
+
+The exposed ports are configurable in `.env`:
+
+```env
+API_HOST_PORT=18000
+WEB_HOST_PORT=3000
+OLLAMA_HOST_PORT=11434
+NEXT_PUBLIC_API_BASE_URL=http://localhost:18000
+```
+
+If `18000` is also occupied, choose another unused port and keep `NEXT_PUBLIC_API_BASE_URL` synchronized, for example:
+
+```env
+API_HOST_PORT=18001
+NEXT_PUBLIC_API_BASE_URL=http://localhost:18001
+```
+
+Then rebuild the web image so its browser-facing API URL is updated:
+
+```bash
+docker compose down
+docker compose up -d --build
+./scripts/smoke-test.sh
+```
+
+To identify what currently owns port `8000` on macOS or Linux:
+
+```bash
+lsof -nP -iTCP:8000 -sTCP:LISTEN
+docker ps --filter publish=8000 --format 'table {{.Names}}\t{{.Ports}}'
+```
 
 ### Try an Indonesian ticker
 
 The UI accepts `BBCA` or `BBCA.JK`. The backend normalizes bare IDX tickers to `.JK`.
 
 ```bash
-curl http://localhost:8000/v1/market/BBCA/quote
+curl http://localhost:18000/v1/market/BBCA/quote
 ```
 
 Create a research task:
 
 ```bash
-curl -X POST http://localhost:8000/v1/research-tasks \
+curl -X POST http://localhost:18000/v1/research-tasks \
   -H 'Content-Type: application/json' \
   -d '{
     "ticker": "BBCA",
@@ -65,13 +100,13 @@ curl -X POST http://localhost:8000/v1/research-tasks \
 Start a run using the returned task ID:
 
 ```bash
-curl -X POST http://localhost:8000/v1/research-tasks/<TASK_ID>/runs
+curl -X POST http://localhost:18000/v1/research-tasks/<TASK_ID>/runs
 ```
 
 Poll the run:
 
 ```bash
-curl http://localhost:8000/v1/runs/<RUN_ID>
+curl http://localhost:18000/v1/runs/<RUN_ID>
 ```
 
 ## Local development without Docker
@@ -103,7 +138,7 @@ Frontend:
 ```bash
 cd frontend
 npm install
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8000 npm run dev
+NEXT_PUBLIC_API_BASE_URL=http://localhost:18000 npm run dev
 ```
 
 ## AI authority boundary

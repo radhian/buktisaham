@@ -27,8 +27,12 @@ docker compose up -d --build api worker web
 echo "[4/4] Running smoke test..."
 ./scripts/smoke-test.sh
 
+WEB_HOST_PORT="$(docker compose port web 3000 2>/dev/null | tail -n 1 | awk -F: '{print $NF}')"
+API_HOST_PORT="$(docker compose port api 8000 2>/dev/null | tail -n 1 | awk -F: '{print $NF}')"
+OLLAMA_HOST_PORT="$(docker compose port ollama 11434 2>/dev/null | tail -n 1 | awk -F: '{print $NF}')"
+
 echo
 echo "BuktiSaham is ready:"
-echo "  Web:      http://localhost:3000"
-echo "  API docs: http://localhost:8000/docs"
-echo "  Ollama:   local only at http://localhost:11434"
+echo "  Web:      http://localhost:${WEB_HOST_PORT:-3000}"
+echo "  API docs: http://localhost:${API_HOST_PORT:-18000}/docs"
+echo "  Ollama:   local only at http://localhost:${OLLAMA_HOST_PORT:-11434}"

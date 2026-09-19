@@ -21,7 +21,7 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(
     title="BuktiSaham API",
-    version="0.1.0",
+    version="0.1.1",
     description="Local-first Indonesian equity research MVP using free stock data and local Ollama review.",
     lifespan=lifespan,
 )
@@ -42,7 +42,7 @@ app.include_router(ai_router)
 def root() -> dict:
     return {
         "name": settings.app_name,
-        "version": "0.1.0",
+        "version": "0.1.1",
         "docs": "/docs",
         "market_data_policy": "FREE_ONLY",
         "ai_provider": "ollama-local",

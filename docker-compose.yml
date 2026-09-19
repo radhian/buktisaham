@@ -31,7 +31,7 @@ services:
     volumes:
       - ollama_data:/root/.ollama
     ports:
-      - "11434:11434"
+      - "${OLLAMA_HOST_PORT:-11434}:11434"
     healthcheck:
       test: ["CMD", "ollama", "list"]
       interval: 10s
@@ -48,7 +48,8 @@ services:
       REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
       OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
     ports:
-      - "8000:8000"
+      # Keep the container on 8000, but avoid the commonly occupied host port.
+      - "${API_HOST_PORT:-18000}:8000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -81,11 +82,11 @@ services:
     build:
       context: ./frontend
       args:
-        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000}
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:18000}
     environment:
-      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000}
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:18000}
     ports:
-      - "3000:3000"
+      - "${WEB_HOST_PORT:-3000}:3000"
     depends_on:
       - api
     restart: unless-stopped
