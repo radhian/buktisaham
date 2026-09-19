@@ -1,4 +1,4 @@
-# Implementation status - v0.2.0
+# Implementation status - v0.2.1
 
 ## Implemented
 
@@ -19,6 +19,9 @@
 - Local Ollama explanation-only review
 - Free-only yfinance market-data guard
 - Dashboard, task detail, run history, trace, result drill-down, methodology, and settings views
+- Instant English/Bahasa Indonesia interface switching with browser persistence
+- Localized application-owned labels, statuses, stages, and known orchestration messages
+- Language switching does not mutate evidence, hashes, or user-entered research content
 - Backward-compatible single-ticker create payload
 - Upgrade compatibility for v0.1.x rows
 - Docker Compose and operational scripts

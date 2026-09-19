@@ -34,12 +34,20 @@ The primary objects are:
 - Stock market data is free-only through **yfinance**.
 - Indonesian symbols are normalized to Yahoo's **.JK** convention.
 - Up to 10 tickers can be analyzed in one task.
-- Runs are started manually in v0.2.0.
+- Runs are started manually in v0.2.1.
 - Cadence is stored in the task contract for future scheduler support, but automatic scheduling is not claimed as implemented.
 - The product is EOD/delayed research infrastructure, not an exchange-grade real-time terminal.
 - BuktiSaham does not place trades or connect to a broker.
 
-## What changed in v0.2.0
+## What changed in v0.2.1
+
+- Added a complete English/Bahasa Indonesia interface switch in Settings.
+- Language changes apply instantly without a page reload and persist in the browser.
+- Localized navigation, forms, tables, methodology, settings, research-result labels, run stages, statuses, and known orchestration messages.
+- Expanded the README runtime architecture into a detailed Mermaid component and data-flow diagram.
+- Added practical stock-research pro tips and a disciplined research checklist to the PRD/TRD.
+
+The v0.2.0 foundation included:
 
 - Reframed the product around reusable research tasks.
 - Added multi-ticker task universes.
@@ -84,6 +92,12 @@ Use the web interface and select **New task**, or run the included example:
 ~~~
 
 The demo creates an Indonesian banking research task for BBCA, BBRI, and BMRI, starts a run, follows progress, and prints the published action counts and immutable bundle hash.
+
+## Language settings
+
+Open **Settings**, then choose **English** or **Bahasa Indonesia**. The workspace updates immediately without reloading the page. The selection is stored in browser `localStorage` under `buktisaham-language`, so the same browser keeps the preferred interface language on the next visit.
+
+The switch localizes application-owned interface text. User-entered task names and theses, source records, and narrative text returned by external data or model providers remain in their original language so the audit record is not silently altered.
 
 ## API example
 
@@ -170,15 +184,46 @@ The deterministic engine is authoritative for market facts, score calculations, 
 
 ~~~mermaid
 flowchart TB
-    UI[Next.js task workspace] --> API[FastAPI orchestration API]
-    API --> DB[(PostgreSQL)]
-    API --> Q[Redis research queue]
-    Q --> W[Research worker]
-    W --> Y[yfinance free EOD adapter]
-    W --> QNT[Deterministic Python engine]
-    W --> O[Local Ollama]
-    W --> DB
+    USER[Research user]
+
+    subgraph CLIENT[Browser and presentation]
+        WEB[Next.js task workspace]
+        I18N[EN and ID localization state]
+    end
+
+    subgraph CONTROL[Task orchestration]
+        API[FastAPI task and run API]
+        QUEUE[Redis and RQ queue]
+        WORKER[Multi-ticker research worker]
+    end
+
+    subgraph ENGINE[Research execution]
+        MARKET[yfinance free EOD adapter]
+        QUANT[Deterministic scoring and scenarios]
+        OLLAMA[Local Ollama evidence review]
+    end
+
+    subgraph RECORD[Persistent audit record]
+        DB[(PostgreSQL)]
+        PACKET[Immutable evidence packet]
+    end
+
+    USER --> WEB
+    WEB <--> I18N
+    WEB -->|HTTPS or local HTTP| API
+    API -->|tasks, config versions, reads| DB
+    API -->|enqueue run snapshot| QUEUE
+    QUEUE --> WORKER
+    WORKER --> MARKET
+    WORKER --> QUANT
+    WORKER --> OLLAMA
+    WORKER -->|events and results| DB
+    WORKER --> PACKET
+    PACKET --> DB
+    DB --> API
 ~~~
+
+The API snapshots the selected task configuration before enqueueing. The worker reads that immutable snapshot, executes every ticker independently, emits append-only progress events, and publishes either a complete, partial, or failed outcome. The browser polls read models from the API; it never performs financial calculations or lets localization modify stored evidence.
 
 Runtime services:
 

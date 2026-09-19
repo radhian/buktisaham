@@ -12,7 +12,7 @@ Required business meaning:
 - **horizon_days** controls scenario horizon;
 - **capital_idr** provides a decision context, not a brokerage balance;
 - **analysis_modules** declares the expected pipeline;
-- **cadence** is metadata in v0.2.0 and does not yet trigger automatic runs.
+- **cadence** is metadata in v0.2.1 and does not yet trigger automatic runs.
 
 ## Configuration version
 

@@ -1,10 +1,11 @@
-# BuktiSaham v0.2.0 architecture
+# BuktiSaham v0.2.1 architecture
 
 ## System context
 
 ~~~mermaid
 flowchart TB
     U[Research user] --> UI[Next.js task workspace]
+    UI <--> L[English and Bahasa Indonesia localization]
     UI --> API[FastAPI orchestration API]
     API --> PG[(PostgreSQL)]
     API --> RQ[Redis queue]

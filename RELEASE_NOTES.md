@@ -1,4 +1,16 @@
-# Release notes - BuktiSaham v0.2.0
+# Release notes - BuktiSaham v0.2.1
+
+## Localization and guidance update
+
+- Added a Settings control for instant English/Bahasa Indonesia interface switching.
+- Persisted the selected language in browser local storage.
+- Localized navigation, forms, tables, settings, methodology, statuses, stages, and known orchestration messages.
+- Kept stored evidence, hashes, and user-entered content unchanged when the display language changes.
+- Expanded the README with a detailed Mermaid runtime architecture.
+- Added disciplined Indonesian-stock research pro tips and a pre-run checklist to the PRD/TRD.
+- Updated the combined PRD/TRD blueprint to v2.1.
+
+## v0.2.0 task-orchestration foundation
 
 ## Product reframing
 

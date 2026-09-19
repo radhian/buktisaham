@@ -122,6 +122,14 @@ code { color: #8dc9ff; font-family: ui-monospace, SFMono-Regular, Menlo, monospa
 .task-hero p { max-width: 850px; }
 .task-detail-grid, .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 16px 0; }
 .settings-grid .full { grid-column: 1/-1; }
+.language-panel { background: linear-gradient(135deg, rgba(13, 55, 64, .96), rgba(9, 27, 44, .94)); border-color: #2b756d; }
+.language-panel p { margin: -5px 0 17px; }
+.language-picker { display: grid; grid-template-columns: repeat(2, minmax(0, 230px)); gap: 10px; }
+.language-picker button { display: flex; align-items: center; gap: 11px; border: 1px solid #28526c; background: #081c2d; color: #7592aa; border-radius: 12px; padding: 12px 14px; font-weight: 950; text-align: left; }
+.language-picker button span { font-weight: 750; color: #b7c9d8; }
+.language-picker button.active { border-color: #43cbbb; background: #0b3739; color: var(--teal); box-shadow: 0 0 0 3px rgba(94, 234, 212, .08); }
+.language-picker button.active span { color: #effffc; }
+.language-status { display: flex; align-items: center; gap: 9px; color: #8fb3b7; margin-top: 14px; }
 .panel dl { margin: 0; }
 .panel dl div { display: flex; justify-content: space-between; gap: 15px; padding: 10px 0; border-top: 1px solid var(--line-soft); }
 .panel dt { color: #88a0b5; }

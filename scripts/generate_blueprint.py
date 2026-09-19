@@ -22,7 +22,7 @@ from reportlab.platypus import (
 )
 
 
-OUTPUT = Path(__file__).resolve().parents[1] / "output" / "pdf" / "BuktiSaham_PRD_TRD_v2.0_Task_Orchestration.pdf"
+OUTPUT = Path(__file__).resolve().parents[1] / "output" / "pdf" / "BuktiSaham_PRD_TRD_v2.1_Task_Orchestration.pdf"
 
 NAVY = colors.HexColor("#071421")
 NAVY_2 = colors.HexColor("#0D2438")
@@ -223,7 +223,7 @@ def trust_diagram() -> list:
 
 class BlueprintDoc(BaseDocTemplate):
     def __init__(self, filename: str):
-        super().__init__(filename, pagesize=A4, rightMargin=16 * mm, leftMargin=16 * mm, topMargin=19 * mm, bottomMargin=17 * mm, title="BuktiSaham PRD and TRD v2.0")
+        super().__init__(filename, pagesize=A4, rightMargin=16 * mm, leftMargin=16 * mm, topMargin=19 * mm, bottomMargin=17 * mm, title="BuktiSaham PRD and TRD v2.1")
         frame = Frame(self.leftMargin, self.bottomMargin, self.width, self.height, id="body")
         self.addPageTemplates(PageTemplate(id="main", frames=[frame], onPage=self.page_decoration))
 
@@ -239,7 +239,7 @@ class BlueprintDoc(BaseDocTemplate):
         canvas.line(18 * mm, A4[1] - 13 * mm, A4[0] - 18 * mm, A4[1] - 13 * mm)
         canvas.setFont("Helvetica-Bold", 7.5)
         canvas.setFillColor(NAVY_3)
-        canvas.drawString(18 * mm, A4[1] - 10 * mm, "BuktiSaham v2.0 · Task-Based Indonesian Equity Research")
+        canvas.drawString(18 * mm, A4[1] - 10 * mm, "BuktiSaham v2.1 · Task-Based Indonesian Equity Research")
         canvas.setFont("Helvetica", 7)
         canvas.setFillColor(MUTED)
         canvas.drawRightString(A4[0] - 18 * mm, 9 * mm, f"PRD + TRD · Page {doc.page}")
@@ -256,19 +256,19 @@ def section(story: list, number: str, title: str, intro: str | None = None, page
 
 def build_story() -> list:
     s: list = []
-    s += [Spacer(1, 42 * mm), P("IMPLEMENTATION BLUEPRINT · VERSION 2.0", "CoverEyebrow"), P("BuktiSaham", "CoverTitle"), P("Task-Based Indonesian Equity Research Orchestration", "CoverTitle"), P("Combined Product Requirements Document (PRD) and Technical Requirements Document (TRD)", "CoverSub")]
+    s += [Spacer(1, 42 * mm), P("IMPLEMENTATION BLUEPRINT · VERSION 2.1", "CoverEyebrow"), P("BuktiSaham", "CoverTitle"), P("Task-Based Indonesian Equity Research Orchestration", "CoverTitle"), P("Combined Product Requirements Document (PRD) and Technical Requirements Document (TRD)", "CoverSub")]
     s += task_object_diagram()
     s += [Spacer(1, 16 * mm), P("Prepared as the approval baseline for actual product and engineering implementation.", "CoverSub"), P("19 September 2026 · Repository baseline: github.com/radhian/buktisaham", "Smallx")]
 
     section(s, "0", "Document Control and Decision Record", "This version supersedes the one-shot research-screen framing. It preserves the Indonesian methodology, local Ollama constraint, free-only data constraint, and deterministic authority boundary while making the task the primary product object.")
     s.append(data_table(["Field", "Decision"], [
-        ["Product", "BuktiSaham"], ["Version", "2.0 task-orchestration blueprint"], ["Implementation checkpoint", "Repository v0.2.0"], ["Primary journey", "Create Task → Run Saved Method → Observe → Review Evidence → Rerun"], ["AI", "Local Ollama, explanation and challenge only"], ["Market data", "Free-only yfinance adapter for EOD/delayed MVP"], ["Decision authority", "Deterministic Python policy engine"], ["Approval effect", "Authorizes implementation against the contracts in this document; it is not an investment recommendation"]
+        ["Product", "BuktiSaham"], ["Version", "2.1 task-orchestration blueprint"], ["Implementation checkpoint", "Repository v0.2.1"], ["Primary journey", "Create Task → Run Saved Method → Observe → Review Evidence → Rerun"], ["Languages", "Instant English and Bahasa Indonesia interface switch"], ["AI", "Local Ollama, explanation and challenge only"], ["Market data", "Free-only yfinance adapter for EOD/delayed MVP"], ["Decision authority", "Deterministic Python policy engine"], ["Approval effect", "Authorizes implementation against the contracts in this document; it is not an investment recommendation"]
     ], [115, 365]))
     s.append(P("Key architecture decisions", "H2x"))
-    s.append(bullet(["A research task is a reusable mandate, not a recommendation.", "Every task update publishes a new immutable configuration version and hash.", "Every run snapshots the selected configuration before it enters the queue.", "A multi-ticker run may publish partial success; successful results are never discarded because one ticker failed.", "AI output is non-authoritative and may never overwrite a deterministic fact, score, scenario, policy result, or hash.", "The MVP has no automatic scheduler, authentication, broker connection, or paid-provider fallback."]))
+    s.append(bullet(["A research task is a reusable mandate, not a recommendation.", "Every task update publishes a new immutable configuration version and hash.", "Every run snapshots the selected configuration before it enters the queue.", "A multi-ticker run may publish partial success; successful results are never discarded because one ticker failed.", "AI output is non-authoritative and may never overwrite a deterministic fact, score, scenario, policy result, or hash.", "Localization changes presentation only; it never rewrites stored task evidence or hashes.", "The MVP has no automatic scheduler, authentication, broker connection, or paid-provider fallback."]))
 
     section(s, "1", "Executive Summary", "BuktiSaham is a personal research operating system for Indonesian equities. The user defines a repeatable decision mandate once and runs it whenever fresh evidence is required.")
-    s.append(P("The prior screen executed one ticker immediately and then displayed the result. The underlying backend already had task and run records, but the product did not expose task persistence, configuration identity, run history, progress, or multi-stock orchestration. Version 2.0 aligns the visible product with its intended operating model.", "Bodyx"))
+    s.append(P("The prior screen executed one ticker immediately and then displayed the result. The underlying backend already had task and run records, but the product did not expose task persistence, configuration identity, run history, progress, or multi-stock orchestration. Version 2.1 aligns the visible product with its intended operating model and adds a persistent English/Bahasa Indonesia interface preference.", "Bodyx"))
     s += horizontal_flow("Figure 2. End-to-end product journey", ["Define Task", "Run Snapshot", "Observe Stages", "Review Packet"], [BLUE, NAVY_2, NAVY_3, TEAL])
     s.append(P("Business outcome", "H2x"))
     s.append(bullet(["Users can reproduce a method instead of recreating inputs for every check.", "Teams can explain why a recommendation changed by comparing saved runs and evidence, not by guessing which prompt changed.", "A single task can compare a small IDX universe under one consistent horizon and policy.", "Failures become visible operational events and partial results remain usable."]))
@@ -297,7 +297,7 @@ def build_story() -> list:
         ["Failures are data", "Every queue and worker transition is recorded as a run event."],
         ["Free means explicit trade-offs", "No billable fallback; availability can be lower and freshness is EOD/delayed."]
     ], [150, 330]))
-    s.append(P("Non-goals for v0.2.0", "H2x"))
+    s.append(P("Non-goals for v0.2.1", "H2x"))
     s.append(bullet(["Automated recurring scheduling", "Authentication or shared workspaces", "Portfolio accounting", "Corporate action reconciliation", "Sector-specific valuation", "Automatic run PDF reports", "Regulated personalized advice", "Brokerage execution"]))
 
     section(s, "4", "User Journey and Information Architecture")
@@ -308,7 +308,8 @@ def build_story() -> list:
         ["Task Detail", "What exact method will execute?", "Review thesis, universe, modules, config hash, history"],
         ["Run History", "What happened in every execution?", "Inspect status, stage, progress, error, packet"],
         ["Run Detail", "What did the task conclude and why?", "Select ticker, inspect scenarios, evidence, Ollama review"],
-        ["Methodology", "How are actions produced?", "Review deterministic and AI authority boundaries"]
+        ["Methodology", "How are actions produced?", "Review deterministic and AI authority boundaries"],
+        ["Settings", "How should the workspace be displayed?", "Switch English/Bahasa Indonesia without reload"]
     ], [95, 175, 210]))
     s.append(P("Happy path", "H2x"))
     s.append(bullet(["User creates a named task with thesis and one to ten IDX symbols.", "System normalizes symbols, validates the task, publishes config v1, and displays its hash.", "User selects Run saved methodology.", "API rejects duplicate active execution, snapshots the config, stores a queued event, and enqueues work.", "UI polls and shows aggregate stage progress.", "Worker publishes complete or partial packet with per-symbol drill-down.", "User revisits the task later and runs the same or a newly versioned configuration."]))
@@ -352,6 +353,23 @@ def build_story() -> list:
     s.append(P("Research actions", "H2x"))
     s.append(bullet(["BUY_RESEARCH: evidence and expected return pass configured upside and risk gates.", "HOLD_RESEARCH: evidence is usable but upside is inside hold range.", "SELL_RESEARCH: downside/valuation policy supports reduction research.", "WATCH: confidence, completeness, liquidity, or consistency is insufficient for a stronger action."]))
 
+    section(s, "7A", "Pro Tips for Disciplined Stock Research", "The goal is a higher-quality, risk-aware decision process - not a promise of the highest return. Use BuktiSaham as a repeatable research assistant, then verify material facts against official disclosures before acting.")
+    s += horizontal_flow("Figure 5A. Disciplined research loop", ["Define Thesis", "Verify Filings", "Compare Peers", "Stress Scenarios", "Record Decision"], [BLUE, NAVY_2, NAVY_3, AMBER, TEAL])
+    s.append(data_table(["Pro tip", "How to apply it", "Common mistake avoided"], [
+        ["Start with a falsifiable thesis", "Write what must be true, the expected horizon, and the evidence that would invalidate the idea.", "Changing the story after the price moves."],
+        ["Check official disclosures", "Read the latest audited annual report, interim statements, material information, corporate actions, and issuer presentation. Record each as-of date.", "Relying only on price feeds, summaries, or social media."],
+        ["Use sector-fit metrics", "Compare banks with banking ratios, commodities with cycle and cost drivers, and consumer names with margin, volume, and working-capital measures.", "Using one valuation multiple across unrelated sectors."],
+        ["Separate facts and assumptions", "Tag observed data, derived calculations, and scenario assumptions separately. Keep the deterministic packet unchanged.", "Treating a forecast as a fact."],
+        ["Study cash flow and balance-sheet risk", "Reconcile profit with operating cash flow; review leverage, refinancing, dilution, related-party exposure, and contingent liabilities.", "Buying earnings growth that is not supported by cash or funding quality."],
+        ["Model downside before upside", "Set Bear, Base, and Bull drivers, probabilities, invalidation points, and a margin-of-safety requirement before considering an entry.", "Focusing on a target price without loss capacity."],
+        ["Respect liquidity and sizing", "Check turnover and tradability; size exposure from risk capacity and portfolio concentration, not only conviction.", "A position that cannot be exited under stress."],
+        ["Rerun on real catalysts", "Update after results, guidance, material disclosures, corporate actions, or a thesis-breaking event. Compare the new packet with the prior run.", "Reacting to noise while ignoring changed fundamentals."],
+    ], [105, 235, 140]))
+    s.append(P("Pre-run checklist", "H2x"))
+    s.append(bullet(["Is the ticker, reporting period, and data as-of timestamp correct?", "What is the thesis, horizon, and explicit invalidation condition?", "Which official filing supports each material claim?", "Are peer companies and valuation methods appropriate for the sector?", "What happens to value under lower growth, weaker margins, higher rates, or currency pressure?", "What evidence is missing, stale, inconsistent, or provider-limited?", "What position size keeps the Bear case within the user's risk capacity?", "What future event should trigger the next task run?"]))
+    s.append(P("Indonesia-specific evidence starting points", "H2x"))
+    s.append(P("Use the IDX listed-company financial and annual report portal (https://www.idx.co.id/id/perusahaan-tercatat/laporan-keuangan-dan-tahunan), issuer investor-relations pages, and OJK public information (https://www.ojk.go.id). Confirm publication dates and retain source links in the research record."))
+
     section(s, "8", "Scenario, Confidence, and Risk Contracts")
     s.append(data_table(["Output", "Contract"], [
         ["Bear/Base/Bull", "Every scenario stores target price, return, and probability."],
@@ -382,7 +400,7 @@ def build_story() -> list:
         ["Price and volume", "Yahoo Finance via yfinance", "Public/unofficial; terms and continuity must be reviewed", "Ticker result fails; no paid fallback"],
         ["Fundamentals", "Fields exposed through yfinance", "May be incomplete and not filing-normalized", "Missing fields reduce coverage"],
         ["AI", "Local Ollama", "Data remains local to the configured host", "Deterministic result still publishes"],
-        ["Future filings", "IDX/OJK/issuer IR", "Public availability does not automatically grant bulk automation rights", "Not implemented in v0.2.0"],
+        ["Future filings", "IDX/OJK/issuer IR", "Public availability does not automatically grant bulk automation rights", "Not implemented in v0.2.1"],
         ["Future licensed feed", "IDX/vendor adapter", "Entitlement required", "Architecture extension; not automatic fallback"]
     ], [90, 110, 180, 100]))
     s.append(P("Evidence record minimum", "H2x"))
@@ -450,14 +468,15 @@ def build_story() -> list:
         ["Run Detail", "Status, stage, progress, events, summary, ticker tabs", "Showing a blank screen during background work"],
         ["Analysis", "Action, current price, upside/downside, confidence, scenarios", "Presenting scenario target as guaranteed forecast"],
         ["Evidence", "Source link, evidence type, hashes", "Unattributed numeric claims"],
-        ["Methodology", "Deterministic/AI boundary and provider policy", "Suggesting AI selects the action"]
+        ["Methodology", "Deterministic/AI boundary and provider policy", "Suggesting AI selects the action"],
+        ["Settings", "Instant English/Bahasa Indonesia switch and active state", "Reloading the page or mutating stored evidence"]
     ], [85, 245, 150]))
     s.append(P("Responsive behavior", "H2x"))
     s.append(P("Desktop uses persistent sidebar and multi-column cards. Tablet collapses the sidebar label density. Mobile converts navigation to a horizontal strip and all analytical grids to one column. Tables may scroll horizontally but action buttons and status remain visible."))
 
     section(s, "16", "Security, Privacy, and Trust")
     s += trust_diagram()
-    s.append(data_table(["Control", "v0.2.0", "Production requirement"], [
+    s.append(data_table(["Control", "v0.2.1", "Production requirement"], [
         ["Authentication", "None; local single user", "OIDC/session identity and user-scoped tasks"],
         ["Authorization", "Process-local trust", "Task/run ownership and role policies"],
         ["Transport", "Local HTTP defaults", "TLS termination and secure headers"],
@@ -478,7 +497,8 @@ def build_story() -> list:
         ["Universe", "Maximum 10 tickers", "Pydantic validation"],
         ["Determinism", "Same facts/config/formula version yields same deterministic hash", "Regression test"],
         ["Recovery", "PostgreSQL backup and documented restore", "Restore rehearsal"],
-        ["Accessibility", "Keyboard-operable forms and readable contrast", "Manual audit; WCAG test in P1"]
+        ["Accessibility", "Keyboard-operable forms and readable contrast", "Manual audit; WCAG test in P1"],
+        ["Localization", "English and Bahasa Indonesia UI; browser persistence", "Translation QA and locale-aware content policy"]
     ], [100, 235, 145]))
 
     section(s, "18", "Testing and Verification Strategy")
@@ -486,13 +506,13 @@ def build_story() -> list:
         ["Unit", "Ticker normalization, policy gates, scoring, scenarios, schema validation, progress callbacks"],
         ["Domain/API", "Multi-ticker create, config version increment, hash persistence, legacy payload"],
         ["Worker", "Complete, partial, failed, event ordering, config snapshot, AI failure"],
-        ["Frontend", "Production TypeScript build, task creation, polling, terminal packet rendering"],
+        ["Frontend", "Production TypeScript build, task creation, polling, terminal packet rendering, EN/ID switching and persistence"],
         ["Contract", "OpenAPI response fields and backward-compatible create request"],
         ["Integration", "Postgres + Redis + worker + Ollama Compose smoke task"],
         ["Operational", "Backup/restore, container restart, provider outage, port conflict"],
         ["Security", "Dependency audit, secret scan, input abuse, unauthenticated exposure warning"]
     ], [110, 370]))
-    s.append(P("Definition of Done for v0.2.0", "H2x"))
+    s.append(P("Definition of Done for v0.2.1", "H2x"))
     s.append(bullet(["All backend tests and static checks pass.", "Frontend production build passes with lockfile.", "Shell scripts pass syntax validation.", "PDF renders without clipping or broken diagrams.", "Repository ZIP passes integrity test.", "README and implementation status do not claim automatic scheduling or report generation.", "GitHub is not modified without explicit user authorization."]))
 
     section(s, "19", "Deployment and Operations")
@@ -518,18 +538,19 @@ def build_story() -> list:
         ["Run orchestration", "backend/app/worker_jobs.py"],
         ["Deterministic analysis progress", "backend/app/services/analysis_engine.py"],
         ["Task workspace UI", "frontend/app/page.tsx"],
+        ["Interface localization", "frontend/lib/i18n.ts"],
         ["Visual system", "frontend/app/globals.css"],
         ["Browser API client", "frontend/lib/api.ts"],
         ["End-to-end demo", "scripts/task-demo.sh"],
         ["Architecture and contracts", "docs/ARCHITECTURE.md and docs/TASK_ORCHESTRATION.md"]
     ], [175, 305]))
     s.append(P("Current implementation status", "H2x"))
-    s.append(P("Implemented: task dashboard, multi-ticker tasks, configuration versions and hashes, snapshots, queue, events, progress, complete/partial/failed publication, per-ticker result views, local Ollama, free-only data, Docker and verification scripts. Not implemented: scheduler, authentication, official filing normalization, sector valuation, automatic report generation, outcome ledger."))
+    s.append(P("Implemented: task dashboard, multi-ticker tasks, configuration versions and hashes, snapshots, queue, events, progress, complete/partial/failed publication, per-ticker result views, persistent English/Bahasa Indonesia interface switching, local Ollama, free-only data, Docker and verification scripts. Not implemented: scheduler, authentication, official filing normalization, sector valuation, automatic report generation, outcome ledger."))
 
     section(s, "21", "Roadmap and Delivery Epics")
     s += horizontal_flow("Figure 14. Delivery roadmap", ["v0.2 Tasks", "v0.3 Reports", "v0.4 Scheduler/Auth", "v0.5 Data/Models"], [TEAL, BLUE, NAVY_3, AMBER])
     s.append(data_table(["Epic", "Outcome", "Exit gate"], [
-        ["E1 Task orchestration", "Reusable task, config version, run trace", "Implemented in v0.2.0"],
+        ["E1 Task orchestration", "Reusable task, config version, run trace, EN/ID interface", "Implemented in v0.2.1"],
         ["E2 Run PDF report", "Executive and audit-ready report per terminal run", "Report hash and download API"],
         ["E3 Scheduler", "Due-task execution with idempotency and missed-run recovery", "No duplicate scheduled packets"],
         ["E4 Identity", "User-scoped tasks and role-aware access", "Cross-user isolation tests"],
@@ -580,12 +601,12 @@ def build_story() -> list:
 
     section(s, "25", "References and Approval Checklist")
     s.append(P("Repository and implementation references", "H2x"))
-    s.append(bullet(["BuktiSaham repository: https://github.com/radhian/buktisaham", "Next.js security maintenance guidance: https://nextjs.org/blog/tag/security", "Ollama local model API: https://ollama.com", "yfinance project and data-use notes: https://github.com/ranaroussi/yfinance", "IDX data services for future licensed production integration: https://data.idx.co.id", "OJK public information for future regulatory/filing evidence: https://www.ojk.go.id"]))
+    s.append(bullet(["BuktiSaham repository: https://github.com/radhian/buktisaham", "IDX listed-company financial and annual reports: https://www.idx.co.id/id/perusahaan-tercatat/laporan-keuangan-dan-tahunan", "OJK public information and investor education: https://www.ojk.go.id", "Next.js security maintenance guidance: https://nextjs.org/blog/tag/security", "Ollama local model API: https://ollama.com", "yfinance project and data-use notes: https://github.com/ranaroussi/yfinance", "IDX data services for future licensed production integration: https://data.idx.co.id"]))
     s.append(P("Approval checklist", "H2x"))
     s.append(bullet(["Product approves task-first workflow and MVP non-goals.", "Research owner approves deterministic policy terminology and scenario labeling.", "Engineering approves API, event, data model and compatibility contracts.", "Security accepts local-only boundary for MVP and blocks public exposure without identity controls.", "Data owner accepts free-only provider limitations for MVP.", "Delivery owner accepts the roadmap order: report, scheduler, identity, official evidence, sector routing."]))
     s.append(Spacer(1, 10 * mm))
     s.append(P("Approval statement", "Callout"))
-    s.append(P("Approval of this document authorizes implementation and iteration against the stated v2.0 contracts. It does not authorize brokerage execution, public multi-user deployment, paid data procurement, or claims of investment performance."))
+    s.append(P("Approval of this document authorizes implementation and iteration against the stated v2.1 contracts. It does not authorize brokerage execution, public multi-user deployment, paid data procurement, or claims of investment performance."))
     return s
 
 

@@ -21,7 +21,7 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(
     title="BuktiSaham API",
-    version="0.2.0",
+    version="0.2.1",
     description="Task-based Indonesian equity research orchestration using free stock data and local Ollama review.",
     lifespan=lifespan,
 )
