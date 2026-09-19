@@ -1,24 +1,41 @@
-# Release notes - MVP 0.1.1
+# Release notes - BuktiSaham v0.2.0
 
-## Port-conflict fix
+## Product reframing
 
-- The API host port is no longer hard-coded to `8000`.
-- The default host-facing API URL is now `http://localhost:18000`; the API still listens on `8000` inside Docker.
-- `API_HOST_PORT`, `WEB_HOST_PORT`, and `OLLAMA_HOST_PORT` make every published port configurable.
-- The frontend build, API examples, bootstrap output, and smoke test now use the configured host mapping.
-- Added troubleshooting guidance for detecting and resolving an occupied port.
+BuktiSaham is now a task-based Indonesian equity research orchestrator. A user creates a reusable mandate, runs its saved methodology, watches progress, and compares immutable results over time.
 
-## Requested adjustments
+## Added
 
-- AI review is explicitly local through Ollama.
-- Default model is `qwen3:8b` and is configurable through `OLLAMA_MODEL`.
-- No cloud AI API adapter is implemented.
-- Stock data is explicitly free-only for the current MVP.
-- Default/only stock-data adapter is `yfinance` with Indonesian `.JK` ticker normalization.
-- There is no paid stock-data fallback.
+- Multi-ticker tasks
+- Task name and thesis
+- Versioned configuration and hashes
+- Config snapshots per run
+- Dashboard and task workspace
+- Run history and event timeline
+- Progress stages
+- Complete, partial, and failed publication
+- Per-ticker result navigation
+- End-to-end task demo script
+- Task orchestration documentation and APIs
 
-## Runnable implementation
+## Preserved
 
-This ZIP contains a working application skeleton: FastAPI + PostgreSQL + Redis/RQ + local Ollama + Next.js, deterministic analysis/policy, evidence metadata, tests, Docker Compose, and operational scripts.
+- Free-only yfinance provider
+- Local Ollama
+- Explanation-only AI authority
+- Deterministic policy action
+- Port-conflict fix using host API port 18000
+- Existing single-ticker API compatibility
 
-See `docs/IMPLEMENTATION_STATUS.md` for capabilities deliberately left for later phases of the full blueprint.
+## Security maintenance
+
+- Next.js updated to 15.5.24
+- React and React DOM updated to 19.1.5
+
+## Not yet implemented
+
+- Automatic scheduler
+- Authentication
+- Automatic run PDF generation
+- Licensed or official real-time IDX feed
+- Sector-specific valuation models

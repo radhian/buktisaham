@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any, Callable
 
 from app.quant import (
     build_scenarios,
@@ -27,11 +27,25 @@ class AnalysisEngine:
         self.market = market_provider or get_market_provider()
         self.ollama = ollama_client or OllamaClient()
 
-    def analyze(self, *, ticker: str, horizon_days: int, capital_idr: str) -> dict[str, Any]:
+    def analyze(
+        self,
+        *,
+        ticker: str,
+        horizon_days: int,
+        capital_idr: str,
+        progress_callback: Callable[[str, int, str], None] | None = None,
+    ) -> dict[str, Any]:
+        def progress(stage: str, value: int, message: str) -> None:
+            if progress_callback:
+                progress_callback(stage, value, message)
+
         symbol = self.market.normalize_ticker(ticker)
+        progress("collect", 12, f"Collecting free EOD market data for {symbol}")
         history = self.market.get_history(symbol, period="1y", interval="1d")
         fundamentals = self.market.get_fundamentals(symbol)
+        progress("validate", 30, f"Validating freshness and evidence coverage for {symbol}")
         technicals = compute_technicals(history)
+        progress("score", 48, f"Computing deterministic technical, fundamental, and liquidity scores for {symbol}")
         technical_score = round(score_technicals(technicals), 2)
         fundamental_score, fundamental_count = score_fundamentals(fundamentals)
         fundamental_score = round(fundamental_score, 2)
@@ -39,6 +53,7 @@ class AnalysisEngine:
         completeness = round(evidence_completeness(len(history), fundamental_count), 2)
         confidence = confidence_score(technical_score, fundamental_score, liquidity_score, completeness)
         scenario_bundle = build_scenarios(technicals, horizon_days)
+        progress("scenario", 66, f"Building Bear, Base, and Bull scenarios for {symbol}")
 
         policy = decide_action(
             expected_return=scenario_bundle["expected_return"],
@@ -48,6 +63,7 @@ class AnalysisEngine:
             technical_score=technical_score,
             evidence_completeness=completeness,
         )
+        progress("policy", 78, f"Applying deterministic recommendation policy for {symbol}")
 
         evidence = [market_evidence(symbol, technicals, provider=self.market.name)]
         if fundamentals.get("available"):
@@ -93,5 +109,7 @@ class AnalysisEngine:
             "technicals": deterministic["technicals"],
             "fundamentals": deterministic["fundamentals"],
         }
+        progress("ai_review", 90, f"Requesting local Ollama evidence review for {symbol}")
         deterministic["ai_review"] = self.ollama.review(ai_input)
+        progress("package", 97, f"Packaging the immutable evidence result for {symbol}")
         return deterministic

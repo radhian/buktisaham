@@ -43,8 +43,12 @@ class FakeOllama:
 
 
 def test_analysis_never_delegates_action_to_ai():
+    progress = []
     result = AnalysisEngine(FakeMarket(), FakeOllama()).analyze(
-        ticker="BBCA", horizon_days=90, capital_idr="100000000"
+        ticker="BBCA",
+        horizon_days=90,
+        capital_idr="100000000",
+        progress_callback=lambda stage, value, message: progress.append((stage, value, message)),
     )
     assert result["ticker"] == "BBCA.JK"
     assert result["market_data"]["mode"] == "FREE_ONLY"
@@ -52,3 +56,13 @@ def test_analysis_never_delegates_action_to_ai():
     assert result["research_action"] in {"BUY_RESEARCH", "HOLD_RESEARCH", "SELL_RESEARCH", "WATCH"}
     assert result["ai_review"]["summary"] == "deterministic review"
     assert result["deterministic_hash"].startswith("sha256:")
+    assert [item[0] for item in progress] == [
+        "collect",
+        "validate",
+        "score",
+        "scenario",
+        "policy",
+        "ai_review",
+        "package",
+    ]
+    assert progress[-1][1] == 97
